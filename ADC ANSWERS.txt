@@ -1,0 +1,338 @@
+clc;
+clear all;
+close all;
+Ac=input('enter carrier signal amplitude');
+Am=input('enter message signal amplitude');
+fc=input('enter carrier frequency');
+fm=input('enter message frequency');% fm<fc
+m=input('enter modulation index');
+t=input('enter time period');
+t1=linspace(0,t,1000); t=5
+y1=sin(2*pi*fm*t1); % message signal
+y2=sin(2*pi*fc*t1); % carrier signal
+eq=(1+m.y1).(Ac.*y2);
+subplot(311);
+plot(t1,y1);
+xlabel('Time');
+ylabel('Amplitude');
+title('Message signal')
+subplot(312)
+plot(t1,y2);
+xlabel('Time');
+ylabel('Amplitude')
+;title('Carrier signal');
+subplot(313);
+plot(t1,eq);
+plot(t1,eq,'r');
+xlabel('Time');
+ylabel('Amplitude');
+title('Modulated signal');
+enter carrier signal amplitude> 5
+enter message signal amplitude> 5
+enter carrier frequency> 1000
+enter message frequency> 100
+enter modulation index> 1
+enter time period> .1
+
+Frequency Modulation:
+clc;
+clear all;
+close all;
+t=0:0.001:1; %upto 1000 samples
+vm = input('Enter Amplitude (Message) =');
+vc = input('Enter Amplitude (Carrier) = ');
+fM = input('Enter Message frequency =');
+fc = input('Enter Carrier frequency = ');
+m = input('Enter Modulation Index = ');
+msg = vm*sin(2*pi*fM*t);
+subplot(3,1,1); %plotting messagesignal
+plot(t,msg);
+xlabel('Time');
+ylabel('Amplitude');
+title('Message ');
+carrier = vc*sin(2*pi*fc*t);
+subplot(3,1,2); %plotting carrier signal
+plot(t,carrier);
+xlabel('Time');
+ylabel('Amplitude');
+title('Carrier Signal');
+y = vc*sin(2*pi*fc*t+m.*cos(2*pi*fM*t));
+subplot(3,1,3);%plotting FM (Frequency Modulated) signal
+plot(t,y);
+xlabel('Time');
+ylabel('Amplitude');
+title('FM Signal');
+Enter Amplitude (Message) => 5
+Enter Amplitude (Carrier) = > 5
+Enter Message frequency => 8
+Enter Carrier frequency = > 100
+Enter Modulation Index = > 10
+ a BPSK
+clc;
+clear all;
+close all;
+t = 0:0.0001:0.15;
+c11 = sin(2*pi*60*t);
+m = square (2*pi*10*t);
+c22 = sin((2*pi*60*t)+ pi);
+for i = 1:1500
+if(m(i)==1)
+s2(i)=c11(i);
+else
+s2(i)=c22(i);
+end
+end
+figure(3);
+subplot(4,1,1);
+plot(m);
+subplot (4,1,2);
+plot(c11);
+subplot (4,1,3);
+plot(c22);
+subplot (4,1,4);
+plot(s2);
+BFSK:
+clc;
+clear all;
+close all;
+t = 0:0.0001: 0.3;
+m = square (2*pi*10*t);
+c1 = sin (2*pi*60*t);
+c2 = sin (2*pi*120*t);
+for i = 1 : 3000
+if(m(i)==1)
+s1(i)=c2(i);
+else s1(i)=c1(i);
+end
+end
+figure(2);
+subplot(4,1,1);
+plot(m);
+subplot(4,1,2);
+plot(c1);
+subplot(4,1,3);
+plot(c2);
+subplot(4,1,4);
+plot(s1);                   QPSK:
+clc;
+clear all;
+close all;
+Tb=3;
+t=0:(Tb/100):Tb;
+fc=1;
+c1=sqrt(2/Tb)*cos(2*pi*fc*t);
+c2=sqrt(2/Tb)*sin(2*pi*fc*t);
+N=20;
+m=rand(1,N);
+t1=0;
+t2=Tb;
+for i=1:2:(N-1)
+t=[t1:(Tb/100):t2];
+if m(i)>0.5
+m(i)=1;
+m_so= ones (1,length(t));
+else
+m(i)=0;
+m_so= -1*ones (1,length(t));
+end
+% m_s1(i,:)=m_so;
+% subplot(4,2,1);
+% plot(t,m_s1(i,:));
+odd_sig(i,:)=c1.*m_so;
+subplot(3,2,2);
+plot(t,odd_sig(i,:));
+title('odd signal');
+xlabel('t--->');
+ylabel('o(t)');
+grid on;
+hold on;
+if m(i+1)>0.5
+m(i+1)=1;
+m_se=ones(1,length(t));
+else
+m(i+1)=0;
+m_se=-1*ones(1,length(t));
+end
+% m_s2(i+1,:)=m_se;
+% subplot(4,2,2);
+% plot(t,m_s2(i+1,:));
+even_sig(i,:)=c2.*m_se;
+subplot(3,2,3);
+plot(t,even_sig(i,:));
+title('even signal');
+xlabel('t--->');
+ylabel('e(t)');
+grid on;
+hold on;
+qpsk=odd_sig+even_sig;
+subplot(3,2,6);
+plot(t,qpsk(i,:));
+title('qpsk signal');
+xlabel('t--->');
+ylabel('s(t)');
+grid on;
+hold on;
+t1=t1+(Tb+.01);
+t2=t2+(Tb+.01);
+end
+hold off ;
+subplot(3,2,1);
+stem(m);
+title('binary data bits'); xlabel('n--->');ylabel('b(n)'); grid on;
+subplot(3,2,4);plot(t,c1);
+title('carrier signal-1'); xlabel('t--->');ylabel('c1'); grid on;
+subplot(3,2,5);plot(t,c2);
+title('carrier signal-2'); xlabel('t--->');ylabel('c2'); grid on;
+3.b. QPSK
+% DPSK modulation
+% With input information of 1 0 0 0 0 0 0 1 1 1 1 1 0 1 0 1
+clear all;
+close all;
+clc;
+fc=1; % carrier frequency;
+samp=1000;
+t=linspace(0,2*pi,samp);
+ph1=cos(fc*t);
+ph2=-cos(fc*t);
+%b=[ 1 0 0 0 0 0 0 1 1 1 1 1 0 1 0 1];
+b=[ 0 0 1 0 0 1 0 0 1 1];
+%nb(1)=not(xor(b(1),0));
+nb(1)=1;
+x=1;
+for i=2:length(b)+1
+nb(i)=not(xor(b(i-1),x))
+x=nb(i);
+end;
+dpsk=[];bin1=[];bin2=[];
+for j=1:length(nb)
+if nb(j)==0
+dpsk=[dpsk,ph1];
+bin1=[bin1,zeros(1,samp)];
+elseif nb(j)==1
+dpsk=[dpsk,ph2];
+bin1=[bin1,ones(1,samp)];
+end;%% end of if..
+end;%% end of for
+for k=1:length(b)
+if b(k)==0
+bin2=[bin2,zeros(1,samp)];
+elseif b(k)==1
+bin2=[bin2,ones(1,samp)];
+end;
+end;
+subplot(311),plot(bin2,'k','LineWidth',3');
+axis([0 samp*length(b) -0.2 1.2]);
+xlabel('Time index'); ylabel('Amplitude');
+title('The Binary Input','FontSize',12);
+bn=num2str(b);
+bx=['The Binary string is ',bn];
+gtext(bx,'FontSize',12);
+subplot(312),plot(bin1,'k','LineWidth',3');
+axis([0 samp*length(b) -0.2 1.2]);
+xlabel('Time index'); ylabel('Amplitude');
+title('The Binary (differential) Input','FontSize',12);
+bn=num2str(nb);
+bx=['The Differential Binary string is ',bn];
+gtext(bx,'FontSize',12);
+subplot(313),plot(dpsk,'k','LineWidth',3');
+axis([0 samp*length(b) -1.2 1.2]);
+xlabel('Time index'); ylabel('Amplitude');
+title('The Simulated DPSK output','FontSize',12);
+consellation of 16 qam                                                    clc;
+clear all;
+close all;
+M=16;
+N=4000;
+x=randi([0,1],1,N);
+yy=[];
+for i=1:4:length(x)
+if x(i)==0 && x(i+1)==0 && x(i+2)==1 && x(i+3)==0 y=-3+1j*3;
+elseif x(i)==0 && x(i+1)==1 && x(i+2)==1 && x(i+3)==0 y=-1+1j*3;
+elseif x(i)==0 && x(i+1)==0 && x(i+2)==1 && x(i+3)==1 y=-3+1j*1;
+elseif x(i)==0 && x(i+1)==1 && x(i+2)==1 && x(i+3)==1 y=-1+1j*1;
+elseif x(i)==1 && x(i+1)==1 && x(i+2)==1 && x(i+3)==0 y=1+1j*3;
+elseif x(i)==1 && x(i+1)==0 && x(i+2)==1 && x(i+3)==0 y=3+1j*3;
+elseif x(i)==1 && x(i+1)==1 && x(i+2)==1 && x(i+3)==1 y=1+1j*1;
+elseif x(i)==1 && x(i+1)==0 && x(i+2)==1 && x(i+3)==1 y=3+1j*1;
+elseif x(i)==0 && x(i+1)==0 && x(i+2)==0 && x(i+3)==1 y=-3-1j*1;
+elseif x(i)==0 && x(i+1)==1 && x(i+2)==0 && x(i+3)==1 y=-1-1j*1;
+elseif x(i)==0 && x(i+1)==0 && x(i+2)==0 && x(i+3)==0 y=-3-1j*3;
+elseif x(i)==0 && x(i+1)==1 && x(i+2)==0 && x(i+3)==0 y=-1-1j*3;
+elseif x(i)==1 && x(i+1)==1 && x(i+2)==0 && x(i+3)==1 y=1-1j*1;
+elseif x(i)==1 && x(i+1)==0 && x(i+2)==0 && x(i+3)==1 y=3-1j*1;
+elseif x(i)==1 && x(i+1)==1 && x(i+2)==0 && x(i+3)==0 y=1-1j*3;
+elseif x(i)==1 && x(i+1)==0 && x(i+2)==0 && x(i+3)==0 y=3-1j*3;
+end
+yy=[yy y];
+end
+scatterplot(yy);
+EbNOdB=5;
+EbNO=10^(EbNOdB/10);
+n=(1/sqrt(2))*[randn(1, length(yy))+sqrt(-1)*randn(1, length(yy))];
+sigma=sqrt(1/((log2(M))*EbNO));
+r=yy+sigma*n;
+scatterplot(r); grid on;
+#CONSTELLATION OF QPSK & PI/4 SHIFTED QPSK
+clc;
+clear all;
+close all;
+M=16;
+N=1000;
+x=randi([0,1],1,N);
+yy=[];
+for i=1:2:length(x)
+if x(i)==0 && x(i+1)==0 y=cosd(225)+1j*sind(225);
+elseif x(i)==0 && x(i+1)==1 y=cosd(135)+1j*sind(135);
+elseif x(i)==1 && x(i+1)==0 y=cosd(315)+1j*sind(315);
+elseif x(i)==1 && x(i+1)==1 y=cosd(45)+1j*sind(45);
+end
+yy=[yy y];
+end
+scatterplot(yy);
+EbNOdB=15;
+EbNO=10^(EbNOdB/10);
+n=(1/sqrt(2))*[randn(1, length(yy))+1j*randn(1, length(yy))];
+sigma=sqrt(1/((log2(M))*EbNO));
+r=yy+sigma*n;
+scatterplot(r);
+grid on;
+hold on;
+
+
+#Computation of code vector for the cyclic code
+clc;
+clear all;
+close all;
+n=7; k=4;
+msg=[1 0 0 1; 1 0 1 0; 1 0 1 1];
+code =encode(msg,n,k,'cyclic');
+msg
+code
+#Syndrome decoding
+clc;
+clear all;
+close all;
+q=3;
+n=2^q-1;
+k=n-q;
+parmat = hammgen(q);
+trt=syndtable(parmat);
+recd=[1 0 1 1 1 1 0];
+syndrome = rem(recd * parmat',2);
+syndrome_de = bi2de(syndrome, 'left-msb');
+disp(['Syndrome =
+',num2str(syndrome_de),'(decimal),',num2str(syndrome),'(binary)']); corrvect =
+trt(1+syndrome_de,:);
+correctedcode= rem(corrvect+recd,2);
+parmat
+corrvect
+correctedcode
+Syndrome = 7(decimal),1 1 1(binary)
+parmat =
+1 0 0 1 0 1 1
+0 1 0 1 1 1 0
+0 0 1 0 1 1 1
+corrvect =
+0 0 0 0 0 1 0
+correctedcode =
+1 0 1 1 1 0 0
